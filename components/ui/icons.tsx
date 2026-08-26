@@ -1,4 +1,4 @@
-import type { SVGProps } from "react";
+import type { ReactElement, SVGProps } from "react";
 
 export type IconProps = SVGProps<SVGSVGElement> & {
   /** Rendered size in px on a 24x24 grid. */
@@ -111,6 +111,18 @@ export function UserIcon(props: IconProps) {
     <Outline {...props}>
       <circle cx="12" cy="8" r="4" />
       <path d="M4.5 20a7.5 7.5 0 0 1 15 0" />
+    </Outline>
+  );
+}
+
+/** Two-person glyph, used for student counts. */
+export function UsersIcon(props: IconProps) {
+  return (
+    <Outline {...props}>
+      <circle cx="9.5" cy="8" r="3.5" />
+      <path d="M3 19a6.5 6.5 0 0 1 13 0" />
+      <path d="M16.5 5.3a3.5 3.5 0 0 1 0 6.4" />
+      <path d="M18 14.2A5.5 5.5 0 0 1 21 19" />
     </Outline>
   );
 }
@@ -397,4 +409,133 @@ export function AccessibilityIcon(props: IconProps) {
       <path d="m12 15-3.5 5.5M12 15l3.5 5.5" />
     </Outline>
   );
+}
+
+/* ---------- Learning-outcome icons ----------
+   One per `learningOutcome.icon` key in the Sanity schema. */
+
+export function LayersIcon(props: IconProps) {
+  return (
+    <Outline {...props}>
+      <path d="m12 3 9 4.5-9 4.5-9-4.5L12 3Z" />
+      <path d="m3 12 9 4.5 9-4.5" />
+      <path d="m3 16.5 9 4.5 9-4.5" />
+    </Outline>
+  );
+}
+
+export function DatabaseIcon(props: IconProps) {
+  return (
+    <Outline {...props}>
+      <ellipse cx="12" cy="6" rx="8" ry="3" />
+      <path d="M4 6v6c0 1.7 3.6 3 8 3s8-1.3 8-3V6" />
+      <path d="M4 12v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6" />
+    </Outline>
+  );
+}
+
+export function GaugeIcon(props: IconProps) {
+  return (
+    <Outline {...props}>
+      <circle cx="12" cy="12" r="9" />
+      <path d="m12 12 4-4" />
+      <path d="M12 12h.01" />
+    </Outline>
+  );
+}
+
+export function CloudIcon(props: IconProps) {
+  return (
+    <Outline {...props}>
+      <path d="M7 18h10a4 4 0 0 0 .6-8 6 6 0 0 0-11.4 1.6A3.5 3.5 0 0 0 7 18Z" />
+    </Outline>
+  );
+}
+
+export function CodeIcon(props: IconProps) {
+  return (
+    <Outline {...props}>
+      <path d="m8 8-4 4 4 4" />
+      <path d="m16 8 4 4-4 4" />
+      <path d="m13.5 5-3 14" />
+    </Outline>
+  );
+}
+
+export function ShieldIcon(props: IconProps) {
+  return (
+    <Outline {...props}>
+      <path d="M12 3 5 6v6c0 4.2 2.9 7.6 7 9 4.1-1.4 7-4.8 7-9V6l-7-3Z" />
+    </Outline>
+  );
+}
+
+export function TerminalIcon(props: IconProps) {
+  return (
+    <Outline {...props}>
+      <rect x="3" y="4" width="18" height="16" rx="2" />
+      <path d="m7.5 9.5 3 2.5-3 2.5" />
+      <path d="M13 15h4" />
+    </Outline>
+  );
+}
+
+export function RocketIcon(props: IconProps) {
+  return (
+    <Outline {...props}>
+      <path d="M14 4c3.5 1 6 3.5 6 7.5 0 3-1.6 5.6-4 7.5l-4-2-4-2c0-4.4 2.6-8.6 6-11Z" />
+      <circle cx="13.5" cy="10.5" r="1.6" />
+      <path d="M8 16c-1.6.7-2.4 2.3-2.5 4.5 2.2-.1 3.8-.9 4.5-2.5" />
+    </Outline>
+  );
+}
+
+export function PuzzleIcon(props: IconProps) {
+  return (
+    <Outline {...props}>
+      <path d="M10 4a2 2 0 0 1 4 0v1h4a1 1 0 0 1 1 1v4h-1a2 2 0 0 0 0 4h1v4a1 1 0 0 1-1 1h-4v-1a2 2 0 0 0-4 0v1H6a1 1 0 0 1-1-1v-4h1a2 2 0 0 0 0-4H5V6a1 1 0 0 1 1-1h4V4Z" />
+    </Outline>
+  );
+}
+
+export function SparklesIcon(props: IconProps) {
+  return (
+    <Outline {...props}>
+      <path d="m10 3 1.8 4.7L16.5 9.5l-4.7 1.8L10 16l-1.8-4.7L3.5 9.5l4.7-1.8L10 3Z" />
+      <path d="m18 14 .9 2.4 2.4.9-2.4.9-.9 2.4-.9-2.4-2.4-.9 2.4-.9.9-2.4Z" />
+    </Outline>
+  );
+}
+
+export function WorkflowIcon(props: IconProps) {
+  return (
+    <Outline {...props}>
+      <rect x="3" y="3" width="7" height="6" rx="1.5" />
+      <rect x="14" y="15" width="7" height="6" rx="1.5" />
+      <path d="M6.5 9v6a3 3 0 0 0 3 3H14" />
+    </Outline>
+  );
+}
+
+/** Maps a `learningOutcome.icon` key to its component. */
+export const learningOutcomeIcons = {
+  layers: LayersIcon,
+  database: DatabaseIcon,
+  gauge: GaugeIcon,
+  cloud: CloudIcon,
+  code: CodeIcon,
+  shield: ShieldIcon,
+  terminal: TerminalIcon,
+  rocket: RocketIcon,
+  puzzle: PuzzleIcon,
+  sparkles: SparklesIcon,
+  workflow: WorkflowIcon,
+} satisfies Record<string, (props: IconProps) => ReactElement>;
+
+/** Falls back to the star when the key is missing or unknown. */
+export function learningOutcomeIcon(key: string | null | undefined) {
+  if (key && key in learningOutcomeIcons) {
+    return learningOutcomeIcons[key as keyof typeof learningOutcomeIcons];
+  }
+  return StarIcon;
 }
