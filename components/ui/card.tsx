@@ -30,17 +30,26 @@ export function Card({ className, children, ...props }: CardProps) {
 function MetaItem({
   icon,
   children,
+  className,
 }: {
   icon: ReactNode;
   children: ReactNode;
+  className?: string;
 }) {
   return (
-    <span className="inline-flex items-center gap-1.5 text-sm text-neutral-500">
+    <span
+      className={cn(
+        "inline-flex items-center gap-1.5 text-sm text-neutral-500",
+        className,
+      )}
+    >
       {icon}
       {children}
     </span>
   );
 }
+
+export type CourseCardVariant = "inline" | "stacked";
 
 export type CourseCardProps = {
   title: string;
@@ -51,6 +60,8 @@ export type CourseCardProps = {
   /** Square brand tile, e.g. a course logo. Falls back to the title initial. */
   icon?: ReactNode;
   href?: string;
+  /** "stacked" puts the brand tile above a display-face title, as on the home page. */
+  variant?: CourseCardVariant;
   className?: string;
 };
 
@@ -62,6 +73,7 @@ export function CourseCard({
   moduleCount,
   icon,
   href,
+  variant = "inline",
   className,
 }: CourseCardProps) {
   const heading = href ? (
@@ -71,6 +83,62 @@ export function CourseCard({
   ) : (
     title
   );
+
+  const stacked = variant === "stacked";
+  const iconSize = stacked ? 14 : 18;
+  const metaText = stacked
+    ? "gap-1 text-[11px] whitespace-nowrap"
+    : undefined;
+  const meta = (
+    <>
+      <MetaItem
+        className={metaText}
+        icon={<SignalIcon size={iconSize} className="text-neutral-500" />}
+      >
+        {level}
+      </MetaItem>
+      <MetaItem
+        className={metaText}
+        icon={<ClockIcon size={iconSize} className="text-neutral-500" />}
+      >
+        {duration}
+      </MetaItem>
+      <MetaItem
+        className={metaText}
+        icon={<FolderIcon size={iconSize} className="text-neutral-500" />}
+      >
+        {moduleCount} modules
+      </MetaItem>
+    </>
+  );
+
+  if (stacked) {
+    return (
+      <Card className={cn("gap-6 p-6", className)}>
+        <div
+          className={cn(
+            "flex size-16 shrink-0 items-center justify-center overflow-hidden rounded-md",
+            icon
+              ? undefined
+              : "bg-neutral-900 text-2xl font-semibold text-white",
+          )}
+        >
+          {icon ?? title.charAt(0)}
+        </div>
+        <div className="min-w-0">
+          <h3 className="font-display text-xl font-bold text-neutral-900">
+            {heading}
+          </h3>
+          <p className="mt-3 text-sm leading-6 text-neutral-500">
+            {description}
+          </p>
+        </div>
+        <div className="mt-auto flex flex-wrap items-center justify-between gap-x-3 gap-y-2 border-t border-neutral-200 pt-4">
+          {meta}
+        </div>
+      </Card>
+    );
+  }
 
   return (
     <Card className={cn("gap-4", className)}>
@@ -86,15 +154,7 @@ export function CourseCard({
         </div>
       </div>
       <div className="mt-auto flex flex-wrap items-center gap-x-5 gap-y-2 pt-2">
-        <MetaItem icon={<SignalIcon size={18} className="text-neutral-500" />}>
-          {level}
-        </MetaItem>
-        <MetaItem icon={<ClockIcon size={18} className="text-neutral-500" />}>
-          {duration}
-        </MetaItem>
-        <MetaItem icon={<FolderIcon size={18} className="text-neutral-500" />}>
-          {moduleCount} modules
-        </MetaItem>
+        {meta}
       </div>
     </Card>
   );

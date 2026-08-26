@@ -2,7 +2,7 @@ import type { ButtonHTMLAttributes, ReactNode } from "react";
 import { cn } from "@/lib/cn";
 
 export type ButtonVariant = "primary" | "secondary" | "tertiary" | "text";
-export type ButtonSize = "lg" | "md";
+export type ButtonSize = "xl" | "lg" | "md";
 
 export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?: ButtonVariant;
@@ -14,12 +14,13 @@ export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 };
 
 const base =
-  "inline-flex h-11 items-center justify-center gap-2 rounded-md font-medium whitespace-nowrap " +
+  "inline-flex items-center justify-center gap-2 rounded-md font-medium whitespace-nowrap " +
   "transition-colors disabled:cursor-not-allowed";
 
 const sizes: Record<ButtonSize, string> = {
-  lg: "px-4 text-base",
-  md: "px-3 text-sm",
+  xl: "h-14 gap-3 px-8 text-base",
+  lg: "h-11 px-4 text-base",
+  md: "h-11 px-3 text-sm",
 };
 
 const variants: Record<ButtonVariant, string> = {
@@ -37,6 +38,25 @@ const variants: Record<ButtonVariant, string> = {
     "disabled:text-primary-300 disabled:hover:text-primary-300",
 };
 
+/** Shared button classes, for links that need to look like a button. */
+export function buttonClasses({
+  variant = "primary",
+  size = "lg",
+  className,
+}: {
+  variant?: ButtonVariant;
+  size?: ButtonSize;
+  className?: string;
+} = {}) {
+  return cn(
+    base,
+    sizes[size],
+    variants[variant],
+    variant === "text" && "px-0",
+    className,
+  );
+}
+
 export function Button({
   variant = "primary",
   size = "lg",
@@ -50,13 +70,7 @@ export function Button({
   return (
     <button
       type={type}
-      className={cn(
-        base,
-        sizes[size],
-        variants[variant],
-        variant === "text" && "px-0",
-        className,
-      )}
+      className={buttonClasses({ variant, size, className })}
       {...props}
     >
       {iconLeft}

@@ -183,6 +183,39 @@ export function SpinnerRingIcon(props: IconProps) {
   );
 }
 
+export function ArrowRightIcon(props: IconProps) {
+  return (
+    <Outline {...props}>
+      <path d="M4 12h16" />
+      <path d="m14 6 6 6-6 6" />
+    </Outline>
+  );
+}
+
+export function StarIcon(props: IconProps) {
+  return (
+    <Outline {...props}>
+      <path d="m12 4 2.4 5.1 5.6.8-4 4 .9 5.6-4.9-2.7-4.9 2.7.9-5.6-4-4 5.6-.8L12 4Z" />
+    </Outline>
+  );
+}
+
+export function MenuIcon(props: IconProps) {
+  return (
+    <Outline {...props}>
+      <path d="M4 7h16M4 12h16M4 17h16" />
+    </Outline>
+  );
+}
+
+export function CloseIcon(props: IconProps) {
+  return (
+    <Outline {...props}>
+      <path d="m6 6 12 12M18 6 6 18" />
+    </Outline>
+  );
+}
+
 export function SignalIcon(props: IconProps) {
   return (
     <Outline {...props}>

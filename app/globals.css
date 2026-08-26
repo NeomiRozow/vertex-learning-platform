@@ -112,6 +112,17 @@
   font-weight: 400;
 }
 
+/* Faint diagonal stripes framing the centered page column. */
+@utility hatch {
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgba(203, 213, 225, 0.28) 0,
+    rgba(203, 213, 225, 0.28) 1px,
+    transparent 1px,
+    transparent 7px
+  );
+}
+
 @layer base {
   body {
     background-color: var(--color-canvas);
