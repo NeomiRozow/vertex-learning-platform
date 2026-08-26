@@ -20,6 +20,7 @@ export const resource = defineType({
           {title: 'Article', value: 'article'},
           {title: 'Video', value: 'video'},
           {title: 'Download', value: 'download'},
+          {title: 'Link', value: 'link'},
         ],
       },
       validation: (rule) => rule.required(),

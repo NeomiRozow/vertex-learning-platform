@@ -71,7 +71,7 @@ export const course = defineType({
       validation: (rule) => rule.min(0),
     }),
     defineField({
-      name: 'isPopular',
+      name: 'popular',
       title: 'Popular',
       description: 'Shows the POPULAR badge on the catalog and course page.',
       type: 'boolean',

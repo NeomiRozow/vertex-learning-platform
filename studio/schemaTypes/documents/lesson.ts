@@ -5,6 +5,21 @@ import {PlayIcon} from '@sanity/icons'
  * A lesson does not store its parent course. Courses reference lessons through
  * their modules, and the course is derived with a reverse reference in GROQ.
  */
+/**
+ * Playback happens through the provider's own embed on the lesson page, so a
+ * lesson may only point at a provider we can both ingest and play.
+ * See AGENTS.md section 9.
+ */
+const SUPPORTED_VIDEO_HOSTS = [
+  'youtube.com',
+  'youtu.be',
+  'youtube-nocookie.com',
+  'vimeo.com',
+  'player.vimeo.com',
+  'b-cdn.net',
+  'mediadelivery.net',
+]
+
 export const lesson = defineType({
   name: 'lesson',
   title: 'Lesson',
@@ -48,10 +63,24 @@ export const lesson = defineType({
         rule
           .required()
           .uri({scheme: ['http', 'https']})
-          .error('Must be a valid URL starting with http:// or https://'),
+          .custom((value) => {
+            if (typeof value !== 'string') return true
+            let host: string
+            try {
+              host = new URL(value).hostname.replace(/^www\./, '').toLowerCase()
+            } catch {
+              return 'Must be a valid URL starting with http:// or https://'
+            }
+            const supported = SUPPORTED_VIDEO_HOSTS.some(
+              (allowed) => host === allowed || host.endsWith(`.${allowed}`),
+            )
+            return supported
+              ? true
+              : 'Playback stays on this site, so the URL must be YouTube, Vimeo, or Bunny.'
+          }),
     }),
     defineField({
-      name: 'poster',
+      name: 'thumbnail',
       title: 'Poster image',
       type: 'image',
       group: 'video',
@@ -73,7 +102,7 @@ export const lesson = defineType({
       validation: (rule) => rule.required().integer().positive(),
     }),
     defineField({
-      name: 'isFreePreview',
+      name: 'freePreview',
       title: 'Free preview',
       description: 'A label only. It does not grant or restrict access.',
       type: 'boolean',
@@ -104,7 +133,7 @@ export const lesson = defineType({
       description: 'The "In this lesson you will" list.',
       type: 'array',
       group: 'content',
-      of: [defineArrayMember({type: 'keyPoint'})],
+      of: [defineArrayMember({type: 'string'})],
     }),
     defineField({
       name: 'proTip',
@@ -122,6 +151,6 @@ export const lesson = defineType({
     }),
   ],
   preview: {
-    select: {title: 'title', subtitle: 'summary', media: 'poster'},
+    select: {title: 'title', subtitle: 'summary', media: 'thumbnail'},
   },
 })

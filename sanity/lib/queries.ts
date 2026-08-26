@@ -14,7 +14,7 @@ import {defineQuery} from 'next-sanity'
 
 /** Catalog grid. */
 export const COURSES_CATALOG_QUERY = defineQuery(`
-  *[_type == "course" && defined(slug.current)] | order(isPopular desc, title asc) {
+  *[_type == "course" && defined(slug.current)] | order(popular desc, title asc) {
     _id,
     title,
     "slug": slug.current,
@@ -27,7 +27,7 @@ export const COURSES_CATALOG_QUERY = defineQuery(`
     },
     level,
     price,
-    isPopular,
+    popular,
     studentCount,
     instructor->{
       _id,
@@ -62,7 +62,7 @@ export const COURSE_BY_SLUG_QUERY = defineQuery(`
     },
     level,
     price,
-    isPopular,
+    popular,
     studentCount,
     learningOutcomes[] {
       _key,
@@ -93,7 +93,7 @@ export const COURSE_BY_SLUG_QUERY = defineQuery(`
         "slug": slug.current,
         summary,
         duration,
-        isFreePreview
+        freePreview
       }
     },
     "moduleCount": count(modules),
@@ -110,17 +110,17 @@ export const LESSON_BY_SLUG_QUERY = defineQuery(`
     "slug": slug.current,
     summary,
     videoUrl,
-    poster {
+    thumbnail {
       "asset": asset->{_id, url, metadata{lqip, dimensions{width, height}}},
       hotspot,
       crop,
       alt
     },
     duration,
-    isFreePreview,
+    freePreview,
     studentCount,
     notes,
-    keyPoints[] {_key, text},
+    keyPoints,
     proTip,
     resources[] {
       _key,
@@ -179,7 +179,7 @@ export const INSTRUCTOR_BY_SLUG_QUERY = defineQuery(`
     },
     expertise,
     bio,
-    "courses": *[_type == "course" && references(^._id)] | order(isPopular desc, title asc) {
+    "courses": *[_type == "course" && references(^._id)] | order(popular desc, title asc) {
       _id,
       title,
       "slug": slug.current,
@@ -192,7 +192,7 @@ export const INSTRUCTOR_BY_SLUG_QUERY = defineQuery(`
     },
       level,
       price,
-      isPopular,
+      popular,
       studentCount,
       "lessonCount": count(modules[].lessons[])
     }
@@ -206,6 +206,34 @@ export const CATEGORIES_QUERY = defineQuery(`
     title,
     "slug": slug.current,
     description
+  }
+`)
+
+/**
+ * Video intelligence lookup for search. Internal only: a video is never a
+ * result on its own, it is surfaced through the lesson that uses it.
+ *
+ * Chapters carry clean authored labels, so they are matched first. Chunks are
+ * the noisier backstop and are FILTERED HERE, never projected wholesale — the
+ * full array would overflow the model's context window.
+ *
+ * `$pattern` must be a wildcarded, token-based match built by the caller, for
+ * example "*caching*". Never pass a whole phrase as one pattern.
+ */
+export const VIDEO_MATCHES_QUERY = defineQuery(`
+  *[_type == "video" && url in $urls] {
+    videoId,
+    url,
+    provider,
+    durationSeconds,
+    "chapterMatches": chapters[label match $pattern][0...5] {
+      startSeconds,
+      label
+    },
+    "chunkMatches": chunks[text match $pattern][0...3] {
+      startSeconds,
+      text
+    }
   }
 `)
 
