@@ -1,19 +1,16 @@
 import Image from "next/image";
-import Link from "next/link";
 import type { COURSE_BY_SLUG_QUERY_RESULT } from "@/sanity.types";
 import { urlFor } from "@/sanity/lib/image";
 import { formatCount, formatDuration, formatLevel } from "@/lib/format";
 import { Badge } from "@/components/ui/badge";
-import { buttonClasses } from "@/components/ui/button";
 import {
-  ArrowRightIcon,
-  BookmarkIcon,
   ClockIcon,
   FileIcon,
   SignalIcon,
   UsersIcon,
 } from "@/components/ui/icons";
 import type { ReactNode } from "react";
+import { CourseHeroActions } from "@/components/course/course-hero-actions";
 
 type Course = NonNullable<COURSE_BY_SLUG_QUERY_RESULT>;
 
@@ -86,29 +83,11 @@ export function CourseHero({
           ) : null}
         </div>
 
-        <div className="mt-8 flex flex-wrap items-center gap-4">
-          {firstLessonSlug ? (
-            <Link
-              href={`/lessons/${firstLessonSlug}`}
-              className={buttonClasses({ size: "xl" })}
-            >
-              Start Learning
-              <ArrowRightIcon size={20} />
-            </Link>
-          ) : null}
-          {/* Presentational, per AGENTS section 7: a label, not a saved state. */}
-          <button
-            type="button"
-            className={buttonClasses({
-              variant: "tertiary",
-              size: "xl",
-              className: "gap-3",
-            })}
-          >
-            <BookmarkIcon size={20} />
-            Bookmark
-          </button>
-        </div>
+        <CourseHeroActions
+          courseSlug={course.slug ?? null}
+          courseTitle={course.title ?? ""}
+          firstLessonSlug={firstLessonSlug}
+        />
       </div>
     </section>
   );

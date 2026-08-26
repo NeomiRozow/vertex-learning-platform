@@ -1,5 +1,5 @@
-import Link from "next/link";
 import type { COURSE_BY_SLUG_QUERY_RESULT } from "@/sanity.types";
+import { LessonLink } from "@/components/course/lesson-link";
 import { cn } from "@/lib/cn";
 import { formatDuration, sumDuration } from "@/lib/format";
 import { ChevronDownIcon, PlayCircleIcon } from "@/components/ui/icons";
@@ -96,12 +96,15 @@ function ModuleRow({
             return (
               <li key={lesson._id}>
                 {lesson.slug ? (
-                  <Link
+                  <LessonLink
                     href={`/lessons/${lesson.slug}`}
+                    lessonSlug={lesson.slug}
+                    lessonTitle={lesson.title ?? ""}
+                    lessonLabel={label}
                     className="group/lesson flex items-center gap-3 rounded-xs py-2.5"
                   >
                     {row}
-                  </Link>
+                  </LessonLink>
                 ) : (
                   <span className="group/lesson flex items-center gap-3 py-2.5">
                     {row}

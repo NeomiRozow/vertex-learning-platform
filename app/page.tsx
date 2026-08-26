@@ -4,7 +4,7 @@ import { CourseGrid } from "@/components/course/course-grid";
 import { SiteHeader } from "@/components/home/site-header";
 import { buttonClasses } from "@/components/ui/button";
 import { ArrowRightIcon, StarIcon } from "@/components/ui/icons";
-import { SearchInput } from "@/components/ui/input";
+import { SearchForm } from "@/components/home/search-form";
 import { sanityFetch } from "@/sanity/lib/fetch";
 import { COURSES_CATALOG_QUERY } from "@/sanity/lib/queries";
 
@@ -46,21 +46,7 @@ export default async function Home() {
               <ArrowRightIcon size={20} />
             </Link>
 
-            <form
-              role="search"
-              action="/search"
-              className="mt-12 w-full max-w-[745px]"
-            >
-              <label htmlFor="home-search" className="sr-only">
-                Search your learning
-              </label>
-              <SearchInput
-                id="home-search"
-                name="q"
-                size="lg"
-                placeholder="Ask anything about your learning..."
-              />
-            </form>
+            <SearchForm />
           </section>
 
           <section className="border-t border-neutral-200 px-6 pt-14 pb-16 sm:px-12 xl:px-20">
