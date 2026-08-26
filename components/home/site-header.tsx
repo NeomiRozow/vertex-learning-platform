@@ -1,10 +1,12 @@
 import Link from "next/link";
 import {
-  BellIcon,
-  CloseIcon,
-  MenuIcon,
-  UserFilledIcon,
-} from "@/components/ui/icons";
+  Show,
+  SignInButton,
+  SignUpButton,
+  UserButton,
+} from "@clerk/nextjs";
+import { buttonClasses } from "@/components/ui/button";
+import { BellIcon, CloseIcon, MenuIcon } from "@/components/ui/icons";
 import { NavBar, type NavItem } from "@/components/ui/navigation";
 
 const items: NavItem[] = [
@@ -13,18 +15,35 @@ const items: NavItem[] = [
 ];
 
 /**
- * Placeholder for the signed-in learner. Clerk supplies the real image once
- * authentication is wired up.
+ * Signed out: sign-in and sign-up in modals, so no auth routes are needed.
+ * Signed in: Clerk's user button, sized to the 48px avatar in the design.
  */
-function Avatar() {
+function AuthControls() {
   return (
-    <span
-      role="img"
-      aria-label="Your account"
-      className="flex size-12 items-center justify-center overflow-hidden rounded-full border border-neutral-200 bg-neutral-100 text-neutral-500"
-    >
-      <UserFilledIcon size={28} />
-    </span>
+    <>
+      <Show when="signed-out">
+        <SignInButton mode="modal">
+          <button type="button" className={buttonClasses({ variant: "text", size: "md" })}>
+            Sign in
+          </button>
+        </SignInButton>
+        <SignUpButton mode="modal">
+          <button type="button" className={buttonClasses({ variant: "primary", size: "md" })}>
+            Sign up
+          </button>
+        </SignUpButton>
+      </Show>
+      <Show when="signed-in">
+        <UserButton
+          appearance={{
+            elements: {
+              avatarBox:
+                "size-12 border border-neutral-200",
+            },
+          }}
+        />
+      </Show>
+    </>
   );
 }
 
@@ -74,7 +93,7 @@ export function SiteHeader() {
             >
               <BellIcon size={24} />
             </button>
-            <Avatar />
+            <AuthControls />
             <MobileMenu />
           </>
         }
