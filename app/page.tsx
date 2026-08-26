@@ -1,63 +1,22 @@
-import type { ReactNode } from "react";
 import Link from "next/link";
 import { ChartDecoration } from "@/components/home/chart-decoration";
-import {
-  DockerMark,
-  NextjsMark,
-  TypeScriptMark,
-} from "@/components/home/course-marks";
+import { CourseGrid } from "@/components/course/course-grid";
 import { SiteHeader } from "@/components/home/site-header";
 import { buttonClasses } from "@/components/ui/button";
-import { CourseCard } from "@/components/ui/card";
 import { ArrowRightIcon, StarIcon } from "@/components/ui/icons";
 import { SearchInput } from "@/components/ui/input";
+import { sanityFetch } from "@/sanity/lib/fetch";
+import { COURSES_CATALOG_QUERY } from "@/sanity/lib/queries";
 
-type HomeCourse = {
-  slug: string;
-  title: string;
-  summary: string;
-  level: string;
-  duration: string;
-  moduleCount: number;
-  mark: ReactNode;
-};
+/** Cards shown on the home page; the full list lives on the catalog. */
+const HOME_COURSE_COUNT = 3;
 
-/**
- * Placeholder catalog. Shape mirrors the course fields so this becomes a GROQ
- * result once the Sanity content model exists.
- */
-const courses: HomeCourse[] = [
-  {
-    slug: "nextjs-for-production",
-    title: "Next.js for Production",
-    summary: "Build scalable, high-performance web applications with Next.js.",
-    level: "Intermediate",
-    duration: "18h 24m",
-    moduleCount: 12,
-    mark: <NextjsMark />,
-  },
-  {
-    slug: "docker-essentials",
-    title: "Docker Essentials",
-    summary:
-      "Containerize applications and streamline your development workflow.",
-    level: "Beginner",
-    duration: "10h 12m",
-    moduleCount: 8,
-    mark: <DockerMark />,
-  },
-  {
-    slug: "typescript-deep-dive",
-    title: "TypeScript Deep Dive",
-    summary: "Go beyond the basics and write safer, more expressive code.",
-    level: "Intermediate",
-    duration: "14h 36m",
-    moduleCount: 10,
-    mark: <TypeScriptMark />,
-  },
-];
+export default async function Home() {
+  // Typed by the query TypeMap in sanity.types.ts. Ordered popular first.
+  const courses = (
+    await sanityFetch({ query: COURSES_CATALOG_QUERY, tags: ["course"] })
+  ).slice(0, HOME_COURSE_COUNT);
 
-export default function Home() {
   return (
     <div className="hatch flex flex-1 flex-col">
       <div className="mx-auto flex w-full max-w-[1440px] flex-1 flex-col border-neutral-200 bg-canvas lg:border-x">
@@ -118,23 +77,7 @@ export default function Home() {
               </Link>
             </div>
 
-            <ul className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {courses.map((course) => (
-                <li key={course.slug} className="flex">
-                  <CourseCard
-                    variant="stacked"
-                    className="w-full"
-                    href={`/courses/${course.slug}`}
-                    title={course.title}
-                    description={course.summary}
-                    level={course.level}
-                    duration={course.duration}
-                    moduleCount={course.moduleCount}
-                    icon={course.mark}
-                  />
-                </li>
-              ))}
-            </ul>
+            <CourseGrid courses={courses} className="mt-8" />
 
             <div className="mt-16 flex items-center gap-6">
               <span className="h-px flex-1 bg-neutral-200" />

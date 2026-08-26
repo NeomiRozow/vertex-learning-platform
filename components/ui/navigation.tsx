@@ -86,14 +86,18 @@ export function Breadcrumbs({ items, className, ...props }: BreadcrumbsProps) {
               {item.href && !isLast ? (
                 <Link
                   href={item.href}
-                  className="rounded-xs text-neutral-700 hover:text-primary-500"
+                  className="rounded-xs text-neutral-500 hover:text-primary-500"
                 >
                   {item.label}
                 </Link>
               ) : (
                 <span
                   aria-current={isLast ? "page" : undefined}
-                  className={isLast ? "text-neutral-500" : "text-neutral-700"}
+                  className={
+                    isLast
+                      ? "font-medium text-neutral-900"
+                      : "text-neutral-500"
+                  }
                 >
                   {item.label}
                 </span>
