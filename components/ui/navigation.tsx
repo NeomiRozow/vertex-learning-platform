@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { HTMLAttributes } from "react";
+import type { HTMLAttributes, ReactNode } from "react";
 import { cn } from "@/lib/cn";
 import { ChevronLeftIcon, ChevronRightIcon, VertexMark } from "./icons";
 
@@ -31,9 +31,11 @@ export type NavItem = {
 
 export type NavBarProps = HTMLAttributes<HTMLElement> & {
   items: NavItem[];
+  /** Right-aligned slot, e.g. the notifications bell and the account avatar. */
+  actions?: ReactNode;
 };
 
-export function NavBar({ items, className, ...props }: NavBarProps) {
+export function NavBar({ items, actions, className, ...props }: NavBarProps) {
   return (
     <nav
       aria-label="Main"
@@ -57,6 +59,9 @@ export function NavBar({ items, className, ...props }: NavBarProps) {
           </li>
         ))}
       </ul>
+      {actions ? (
+        <div className="ml-auto flex items-center gap-5">{actions}</div>
+      ) : null}
     </nav>
   );
 }
