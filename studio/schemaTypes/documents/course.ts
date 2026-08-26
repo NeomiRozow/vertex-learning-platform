@@ -1,0 +1,126 @@
+import {defineArrayMember, defineField, defineType} from 'sanity'
+import {BookIcon} from '@sanity/icons'
+
+export const course = defineType({
+  name: 'course',
+  title: 'Course',
+  type: 'document',
+  icon: BookIcon,
+  groups: [
+    {name: 'content', title: 'Content', default: true},
+    {name: 'marketing', title: 'Marketing'},
+  ],
+  fields: [
+    defineField({
+      name: 'title',
+      title: 'Title',
+      type: 'string',
+      group: 'content',
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'slug',
+      title: 'Slug',
+      type: 'slug',
+      group: 'content',
+      options: {source: 'title', maxLength: 96},
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'summary',
+      title: 'Summary',
+      type: 'text',
+      rows: 3,
+      group: 'marketing',
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'coverImage',
+      title: 'Cover image',
+      type: 'image',
+      group: 'marketing',
+      options: {hotspot: true},
+      fields: [
+        defineField({
+          name: 'alt',
+          title: 'Alternative text',
+          type: 'string',
+        }),
+      ],
+    }),
+    defineField({
+      name: 'level',
+      title: 'Level',
+      type: 'string',
+      group: 'marketing',
+      options: {
+        list: [
+          {title: 'Beginner', value: 'beginner'},
+          {title: 'Intermediate', value: 'intermediate'},
+          {title: 'Advanced', value: 'advanced'},
+        ],
+        layout: 'radio',
+      },
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'price',
+      title: 'Price',
+      type: 'number',
+      group: 'marketing',
+      validation: (rule) => rule.min(0),
+    }),
+    defineField({
+      name: 'popular',
+      title: 'Popular',
+      description: 'Shows the POPULAR badge on the catalog and course page.',
+      type: 'boolean',
+      group: 'marketing',
+      initialValue: false,
+    }),
+    defineField({
+      name: 'studentCount',
+      title: 'Student count',
+      description: 'Display only. Not derived from real enrolment.',
+      type: 'number',
+      group: 'marketing',
+      validation: (rule) => rule.integer().min(0),
+    }),
+    defineField({
+      name: 'learningOutcomes',
+      title: "What you'll learn",
+      type: 'array',
+      group: 'marketing',
+      of: [defineArrayMember({type: 'learningOutcome'})],
+      validation: (rule) => rule.max(8),
+    }),
+    defineField({
+      name: 'instructor',
+      title: 'Instructor',
+      type: 'reference',
+      group: 'content',
+      to: [{type: 'instructor'}],
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'category',
+      title: 'Category',
+      type: 'reference',
+      group: 'content',
+      to: [{type: 'category'}],
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'modules',
+      title: 'Modules',
+      description: 'Ordered. The order here is the order learners see.',
+      type: 'array',
+      group: 'content',
+      of: [defineArrayMember({type: 'module'})],
+      validation: (rule) => rule.min(1),
+    }),
+  ],
+  preview: {
+    select: {title: 'title', subtitle: 'instructor.name', media: 'coverImage'},
+  },
+})
