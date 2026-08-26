@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import posthog from "posthog-js";
 import type { CATEGORIES_QUERY_RESULT } from "@/sanity.types";
 import { cn } from "@/lib/cn";
 import { buttonClasses } from "@/components/ui/button";
@@ -6,8 +9,8 @@ import { buttonClasses } from "@/components/ui/button";
 /**
  * Category pills for the catalog.
  *
- * The selection lives in the URL (`?category=<slug>`), so this stays a server
- * component and a filtered view is shareable and back-button correct.
+ * The selection lives in the URL (`?category=<slug>`), so filtered views are
+ * shareable and back-button correct. Marked client-side for PostHog capture.
  */
 export function CategoryFilter({
   categories,
@@ -49,6 +52,14 @@ export function CategoryFilter({
                   }),
                   "rounded-full",
                 )}
+                onClick={() => {
+                  if (!isActive) {
+                    posthog.capture("category_filter_applied", {
+                      category_slug: option.slug ?? "all",
+                      category_label: option.label,
+                    });
+                  }
+                }}
               >
                 {option.label}
               </Link>
